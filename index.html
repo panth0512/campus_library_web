@@ -1,0 +1,642 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Campus_Library</title>
+    <link rel="icon" href="Gemini_Generated_Image_wcyp9wcyp9wcyp9w (1).png" type="image/png">
+
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-database-compat.js"></script>
+
+    <div id="loading-screen" class="loading-screen active">
+        <div class="loader-content">
+            <img src="Gemini_Generated_Image_wcyp9wcyp9wcyp9w (1).png" alt="IIIT Surat Logo" class="loader-logo">
+            <h2>Campus Library</h2>
+            <div class="spinner"></div>
+        </div>
+    </div>
+
+    <div id="auth-container" class="auth-container hidden">
+        <div id="login-section" class="auth-card">
+            <div class="auth-header">
+                <img src="Gemini_Generated_Image_wcyp9wcyp9wcyp9w (1).png" alt="IIIT Surat Logo" class="auth-logo">
+                <h2>Campus Library</h2>
+            </div>
+
+            <form id="login-form">
+                <div class="input-group">
+                    <label for="login-email">Email Address</label>
+                    <div class="input-wrapper">
+                        <i class="fas fa-envelope"></i>
+                        <input type="email" id="login-email" placeholder="student@iiitsurat.ac.in" required>
+                    </div>
+                    <small class="hint">Use your IIIT Surat email address</small>
+                </div>
+
+                <div class="input-group">
+                    <label for="login-password">Password</label>
+                    <div class="input-wrapper">
+                        <i class="fas fa-lock"></i>
+                        <input type="password" id="login-password" placeholder="Enter password" required>
+                        <button type="button" class="toggle-pass" onclick="togglePass('login')">
+                            <i class="fas fa-eye"></i>
+                        </button>
+                    </div>
+                </div>
+
+                <div class="input-group">
+                    <label>Select Role</label>
+                    <div class="role-toggle">
+                        <label>
+                            <input type="radio" name="role" value="student" checked>
+                            <span class="toggle-btn"><i class="fas fa-user-graduate"></i> Student</span>
+                        </label>
+                        <label>
+                            <input type="radio" name="role" value="admin">
+                            <span class="toggle-btn"><i class="fas fa-user-shield"></i> Admin</span>
+                        </label>
+                    </div>
+                </div>
+
+                <button type="submit" class="btn-primary btn-lg full-width">Sign In</button>
+
+                <p class="auth-footer">Don't have an account? <a href="#" onclick="switchAuth('signup')">Register
+                        Now</a></p>
+            </form>
+        </div>
+
+        <div id="signup-section" class="auth-card hidden">
+            <div class="auth-header">
+                <i class="fas fa-user-plus icon-large"></i>
+                <h2>Create Account</h2>
+                <p>Join the Campus Library system</p>
+            </div>
+
+            <form id="signup-form">
+                <div class="input-group">
+                    <label for="reg-email">Email Address</label>
+                    <div class="input-wrapper">
+                        <i class="fas fa-envelope"></i>
+                        <input type="email" id="reg-email" placeholder="student@iiitsurat.ac.in" required>
+                    </div>
+                    <small class="hint">Only the `@iiitsurat.ac.in` domain is allowed</small>
+                </div>
+
+                <div class="input-group">
+                    <label for="reg-password">Password</label>
+                    <div class="input-wrapper">
+                        <i class="fas fa-lock"></i>
+                        <input type="password" id="reg-password" placeholder="Minimum 6 characters" required
+                            oninput="checkPassStrength()">
+                    </div>
+                    <div class="pass-strength">
+                        <div class="strength-bar" id="pass-bar"></div>
+                    </div>
+                </div>
+
+                <div class="input-group">
+                    <label for="reg-confirm">Confirm Password</label>
+                    <div class="input-wrapper">
+                        <i class="fas fa-lock"></i>
+                        <input type="password" id="reg-confirm" placeholder="Re-enter password" required>
+                    </div>
+                </div>
+
+                <button type="submit" class="btn-primary btn-lg full-width">Create Account</button>
+                <p class="auth-footer">Already have an account? <a href="#" onclick="switchAuth('login')">Sign In</a>
+                </p>
+            </form>
+        </div>
+    </div>
+
+    <div id="app-container" class="hidden">
+        <div class="app-shell">
+            <aside id="student-sidebar" class="sidebar hidden">
+                <div class="sidebar-brand">
+                    <img src="Gemini_Generated_Image_wcyp9wcyp9wcyp9w (1).png" alt="IIIT Surat Logo" class="sidebar-logo">
+                    <div>
+                        <strong>Campus Library</strong>
+                        <span>Smart Library</span>
+                    </div>
+                </div>
+
+                <nav class="sidebar-nav">
+                    <button class="nav-item active" onclick="navigateTo('home-section')" data-target="home-section">
+                        <i class="fas fa-house"></i>
+                        <span>Home</span>
+                    </button>
+                    <button class="nav-item" onclick="navigateTo('borrowed-section')" data-target="borrowed-section">
+                        <i class="fas fa-book"></i>
+                        <span>Borrowed</span>
+                    </button>
+                    <button class="nav-item" onclick="navigateTo('requests-section')" data-target="requests-section">
+                        <i class="fas fa-paper-plane"></i>
+                        <span>Requests</span>
+                    </button>
+                    <button class="nav-item" onclick="navigateTo('profile-section')" data-target="profile-section">
+                        <i class="fas fa-user"></i>
+                        <span>Profile</span>
+                    </button>
+                </nav>
+
+                <div class="sidebar-footer">
+                    <strong>Browse by title</strong>
+                    <p>Grouped cards summarize copies as a single entry for easy browsing.</p>
+                </div>
+            </aside>
+
+            <aside id="admin-sidebar" class="sidebar hidden">
+                <div class="sidebar-brand">
+                    <img src="Gemini_Generated_Image_wcyp9wcyp9wcyp9w (1).png" alt="IIIT Surat Logo" class="sidebar-logo">
+                    <div>
+                        <strong>Campus Library</strong>
+                        <span>Admin Console</span>
+                    </div>
+                </div>
+
+                <nav class="sidebar-nav">
+                    <button class="nav-item active" onclick="navigateTo('home-section')" data-target="home-section">
+                        <i class="fas fa-house"></i>
+                        <span>Catalog</span>
+                    </button>
+                    <button class="nav-item" onclick="navigateTo('admin-dashboard-section')"
+                        data-target="admin-dashboard-section">
+                        <i class="fas fa-chart-column"></i>
+                        <span>Dashboard</span>
+                    </button>
+                    <button class="nav-item nav-item--accent" onclick="showAddBookModal()">
+                        <i class="fas fa-plus"></i>
+                        <span>Add Book</span>
+                    </button>
+                    <button class="nav-item" onclick="navigateTo('admin-requests-section')"
+                        data-target="admin-requests-section">
+                        <i class="fas fa-inbox"></i>
+                        <span>Requests</span>
+                    </button>
+                    <button class="nav-item" onclick="navigateTo('profile-section')" data-target="profile-section">
+                        <i class="fas fa-user"></i>
+                        <span>Profile</span>
+                    </button>
+                </nav>
+
+                <div class="sidebar-footer">
+                    <strong>Inventory tools</strong>
+                    <p>Add copies, review grouped requests, and manage issued inventory without leaving the dashboard.
+                    </p>
+                </div>
+            </aside>
+
+            <div class="app-main">
+                <header class="app-header">
+                    <div class="page-heading">
+                        <span class="page-eyebrow" id="page-eyebrow">IIIT Surat</span>
+                        <h1 id="page-title">Smart Library</h1>
+                        <p id="page-subtitle">Search grouped titles, review availability, and open the detail view.</p>
+                    </div>
+
+                    <div class="header-actions">
+                        <span id="user-role-badge" class="role-pill">STUDENT</span>
+                        <div class="user-chip">
+                            <span class="user-chip__label">Signed in as</span>
+                            <strong id="user-email-display">Loading...</strong>
+                        </div>
+                        <button class="icon-btn" onclick="logout()" title="Logout">
+                            <i class="fas fa-arrow-right-from-bracket"></i>
+                        </button>
+                    </div>
+                </header>
+
+                <div id="connection-status" class="connection-status hidden">You are offline. Firebase updates may pause
+                    until the connection returns.</div>
+
+                <main id="main-content">
+                    <section id="home-section" class="content-section active">
+                        <div class="section-shell">
+                            <div class="catalog-search-panel">
+                                <div class="search-box">
+                                    <i class="fas fa-search"></i>
+                                    <input type="text" id="book-search" placeholder="Search books or authors...">
+                                    <button class="clear-search hidden" onclick="clearSearch()">
+                                        <i class="fas fa-times"></i>
+                                    </button>
+                                </div>
+
+                                <select id="category-filter">
+                                    <option value="All Categories">All Categories</option>
+                                    <option value="Popular">Popular</option>
+                                    <option value="Programming">Programming</option>
+                                    <option value="Electronics">Electronics</option>
+                                    <option value="Mathematics">Mathematics</option>
+                                </select>
+                            </div>
+
+                            <div id="catalog-suggestions" class="suggestions-list hidden"></div>
+
+                            <div id="books-grid" class="catalog-list">
+                                <div class="loading-cards">
+                                    <div class="card-skeleton"></div>
+                                    <div class="card-skeleton"></div>
+                                    <div class="card-skeleton"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </section>
+
+                    <section id="borrowed-section" class="content-section hidden">
+                        <div class="section-shell">
+                            <div class="section-header-inline">
+                                <h2>My Borrowed Books</h2>
+                                <span id="borrowed-count" class="support-chip">0 books</span>
+                            </div>
+
+                            <div id="borrowed-list" class="stack-list"></div>
+
+                            <div id="empty-borrowed" class="empty-state hidden">
+                                <i class="fas fa-book-open"></i>
+                                <h3>No borrowed books</h3>
+                                <p>Your issued copies will appear here once an admin accepts a request.</p>
+                            </div>
+                        </div>
+                    </section>
+
+                    <section id="requests-section" class="content-section hidden">
+                        <div class="section-shell">
+                            <div class="section-header-inline">
+                                <h2>My Requests</h2>
+                                <span id="pending-count" class="support-chip">0 pending</span>
+                            </div>
+
+                            <div id="requests-list" class="stack-list"></div>
+
+                            <div id="empty-requests" class="empty-state hidden">
+                                <i class="fas fa-inbox"></i>
+                                <h3>No pending requests</h3>
+                                <p>Request a title from the catalog to see it here.</p>
+                            </div>
+                        </div>
+                    </section>
+
+                    <section id="profile-section" class="content-section hidden">
+                        <div class="section-shell">
+                            <div class="profile-card">
+                                <div class="profile-avatar">
+                                    <i class="fas fa-user-circle"></i>
+                                </div>
+
+                                <div class="profile-meta">
+                                    <h2 id="profile-name">Student</h2>
+                                    <p id="profile-email">student@iiitsurat.ac.in</p>
+                                    <span id="profile-role-chip" class="category-pill">Role: STUDENT</span>
+                                </div>
+
+                                <div class="profile-actions">
+                                    <button class="btn-secondary" onclick="navigateTo('home-section')">
+                                        <i class="fas fa-book-open"></i> Browse Catalog
+                                    </button>
+                                    <button class="btn-danger-outline" onclick="logout()">
+                                        <i class="fas fa-arrow-right-from-bracket"></i> Logout
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </section>
+
+                    <section id="admin-dashboard-section" class="content-section hidden">
+                        <div class="section-shell">
+                            <div class="section-header-inline">
+                                <h2>Library Dashboard</h2>
+                                <span id="admin-pending-chip" class="support-chip">0 pending requests</span>
+                            </div>
+
+                            <div class="dashboard-grid">
+                                <div class="panel stats-panel">
+                                    <div class="panel-heading">
+                                        <h3>Inventory Overview</h3>
+                                        <span class="mini-chip">Live Firebase sync</span>
+                                    </div>
+
+                                    <div class="stats-row">
+                                        <div class="stat-tile">
+                                            <small>Total Books in Library</small>
+                                            <strong id="dash-total">0</strong>
+                                        </div>
+                                        <div class="stat-tile">
+                                            <small>Currently Available</small>
+                                            <strong id="dash-available">0</strong>
+                                        </div>
+                                        <div class="stat-tile">
+                                            <small>Currently Borrowed</small>
+                                            <strong id="dash-borrowed">0</strong>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="panel quick-action-card">
+                                    <h3>Admin Actions</h3>
+                                    <p>Manage inventory and pending requests with streamlined admin actions.</p>
+
+                                    <div class="quick-action-stack">
+                                        <button class="btn-primary" onclick="showAddBookModal()">
+                                            <i class="fas fa-plus"></i> Add Book
+                                        </button>
+                                        <button class="btn-secondary" onclick="navigateTo('admin-requests-section')">
+                                            <i class="fas fa-clipboard-list"></i> Review Requests
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="admin-borrowers-layout">
+                                <div class="panel admin-list-panel">
+                                    <div class="panel-heading">
+                                        <h3>Students Who Borrowed Books</h3>
+                                        <div class="search-box compact">
+                                            <i class="fas fa-search"></i>
+                                            <input type="text" id="admin-borrower-search"
+                                                placeholder="Search student email...">
+                                        </div>
+                                    </div>
+
+                                    <div id="admin-borrowers-list" class="stack-list"></div>
+
+                                    <div id="empty-admin-borrowers" class="empty-state hidden">
+                                        <i class="fas fa-user-group"></i>
+                                        <h3>No issued books</h3>
+                                        <p>Borrower summaries will appear here once requests are accepted.</p>
+                                    </div>
+                                </div>
+
+                                <div class="panel admin-detail-panel">
+                                    <div class="panel-heading">
+                                        <h3 id="admin-borrower-detail-title">Borrowed Books</h3>
+                                        <span id="admin-selected-borrower-count" class="support-chip">Select a
+                                            student</span>
+                                    </div>
+
+                                    <div id="admin-borrowed-books-list" class="stack-list"></div>
+
+                                    <div id="empty-admin-borrowed-books" class="empty-state">
+                                        <i class="fas fa-hand-point-left"></i>
+                                        <h3>Select a borrower</h3>
+                                        <p>Choose a student on the left to review issued books and return them from the
+                                            admin panel.</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </section>
+
+                    <section id="admin-requests-section" class="content-section hidden">
+                        <div class="section-shell">
+                            <div class="section-header-inline">
+                                <h2>Manage Requests</h2>
+                                <span id="admin-requests-count" class="support-chip">0 students</span>
+                            </div>
+
+                            <div class="admin-requests-layout">
+                                <div class="panel admin-list-panel">
+                                    <div class="panel-heading">
+                                        <h3>Students Who Requested Books</h3>
+                                        <div class="search-box compact">
+                                            <i class="fas fa-search"></i>
+                                            <input type="text" id="admin-request-search"
+                                                placeholder="Search student email...">
+                                        </div>
+                                    </div>
+
+                                    <div id="admin-requesters-list" class="stack-list"></div>
+
+                                    <div id="empty-admin-requesters" class="empty-state hidden">
+                                        <i class="fas fa-user-clock"></i>
+                                        <h3>No pending requesters</h3>
+                                        <p>Pending request groups will appear here.</p>
+                                    </div>
+                                </div>
+
+                                <div class="panel admin-detail-panel">
+                                    <div class="panel-heading">
+                                        <h3 id="admin-request-detail-title">Pending Requests</h3>
+                                        <span id="admin-selected-request-count" class="support-chip">Select a
+                                            student</span>
+                                    </div>
+
+                                    <div id="admin-requests-list" class="stack-list"></div>
+
+                                    <div id="empty-admin-requests" class="empty-state">
+                                        <i class="fas fa-hand-point-left"></i>
+                                        <h3>Select a requester</h3>
+                                        <p>Choose a student on the left to review and accept or reject their pending
+                                            requests.</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </section>
+                </main>
+            </div>
+        </div>
+
+        <nav id="student-nav" class="bottom-nav hidden">
+            <button class="nav-item active" onclick="navigateTo('home-section')" data-target="home-section">
+                <i class="fas fa-house"></i>
+                <span>Home</span>
+            </button>
+            <button class="nav-item" onclick="navigateTo('borrowed-section')" data-target="borrowed-section">
+                <i class="fas fa-book"></i>
+                <span>Borrowed</span>
+            </button>
+            <button class="nav-item" onclick="navigateTo('requests-section')" data-target="requests-section">
+                <i class="fas fa-paper-plane"></i>
+                <span>Requests</span>
+            </button>
+            <button class="nav-item" onclick="navigateTo('profile-section')" data-target="profile-section">
+                <i class="fas fa-user"></i>
+                <span>Profile</span>
+            </button>
+        </nav>
+
+        <nav id="admin-nav" class="bottom-nav hidden">
+            <button class="nav-item active" onclick="navigateTo('home-section')" data-target="home-section">
+                <i class="fas fa-house"></i>
+                <span>Catalog</span>
+            </button>
+            <button class="nav-item" onclick="navigateTo('admin-dashboard-section')"
+                data-target="admin-dashboard-section">
+                <i class="fas fa-chart-column"></i>
+                <span>Dashboard</span>
+            </button>
+            <button class="nav-item" onclick="showAddBookModal()">
+                <i class="fas fa-plus"></i>
+                <span>Add Book</span>
+            </button>
+            <button class="nav-item" onclick="navigateTo('admin-requests-section')"
+                data-target="admin-requests-section">
+                <i class="fas fa-inbox"></i>
+                <span>Requests</span>
+            </button>
+            <button class="nav-item" onclick="navigateTo('profile-section')" data-target="profile-section">
+                <i class="fas fa-user"></i>
+                <span>Profile</span>
+            </button>
+        </nav>
+    </div>
+
+    <div id="modal-backdrop" class="hidden">
+        <div id="book-detail-modal" class="modal detail-modal hidden">
+            <div class="modal-header">
+                <h3>Book Detail</h3>
+                <button class="close-btn" onclick="closeModal()">&times;</button>
+            </div>
+
+            <div class="detail-hero">
+                <div id="detail-cover-shell" class="detail-cover-shell is-fallback">
+                    <img id="detail-cover-image" alt="Book cover"
+                        onerror="this.style.display='none'; this.parentElement.classList.add('is-fallback')">
+                    <div class="book-cover-fallback"><i class="fas fa-book-open"></i></div>
+                </div>
+
+                <div class="detail-copy">
+                    <span class="page-eyebrow">Catalog Detail</span>
+                    <h3 id="detail-title">Book Title</h3>
+                    <p id="detail-author">By Author Name</p>
+
+                    <div class="detail-meta">
+                        <span id="detail-category" class="category-pill">Programming</span>
+                        <span id="detail-copies" class="support-chip">Available: 0/0</span>
+                    </div>
+
+                    <div style="margin-top: 14px;">
+                        <button id="detail-action-btn" type="button" class="btn-primary hidden"
+                            onclick="handleDetailPrimaryAction()">
+                            Request for Book
+                        </button>
+                    </div>
+
+                    <div class="section-shell" style="margin-top: 24px;">
+                        <div class="detail-section">
+                            <h4>Summary</h4>
+                            <p id="detail-summary" class="detail-summary">Summary will appear here.</p>
+                        </div>
+
+                        <div id="detail-admin-panel" class="detail-admin hidden">
+                            <div class="admin-control-row">
+                                <div class="admin-control-meta">
+                                    <h4>Admin Inventory Controls</h4>
+                                    <p id="detail-admin-copy-text">Total Inventory: 0 (Available: 0)</p>
+                                    <p id="detail-admin-status">Admin status will appear here.</p>
+                                </div>
+
+                                <div class="card-actions">
+                                    <button class="btn-danger-outline btn-sm" onclick="removeSelectedCopy()">Remove
+                                        Copy</button>
+                                    <button class="btn-secondary btn-sm" onclick="addCopyToSelectedBook()">Add Copy</button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <p id="detail-status" class="detail-status hidden"></p>
+
+                        <div class="modal-actions" style="margin-top: 0; border-top: 1px dashed rgba(229, 213, 245, 0.8); padding-top: 18px;">
+                            <button id="detail-edit-btn" type="button" class="btn-secondary hidden"
+                                onclick="editSelectedBook()">
+                                <i class="fas fa-pen"></i> Edit Details
+                            </button>
+                            <button id="detail-delete-btn" type="button" class="btn-danger-outline hidden"
+                                onclick="deleteSelectedBook()">
+                                <i class="fas fa-trash"></i> Delete Copy
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div id="book-modal" class="modal form-modal hidden">
+            <div class="modal-header">
+                <h3 id="book-form-title">Add New Book</h3>
+                <button class="close-btn" onclick="closeModal()">&times;</button>
+            </div>
+
+            <div class="modal-body">
+                <form id="book-form">
+                    <input type="hidden" id="book-id">
+
+                    <div class="input-group">
+                        <label for="book-title">Book Title</label>
+                        <input type="text" id="book-title" placeholder="Enter title" required>
+                    </div>
+
+                    <div class="input-group">
+                        <label for="book-author">Author</label>
+                        <input type="text" id="book-author" placeholder="Enter author name" required>
+                    </div>
+
+                    <div class="input-row">
+                        <div class="input-group">
+                            <label for="book-category">Category</label>
+                            <select id="book-category">
+                                <option value="Programming">Programming</option>
+                                <option value="Mathematics">Mathematics</option>
+                                <option value="Electronics">Electronics</option>
+                            </select>
+                        </div>
+
+                        <div class="input-group">
+                            <label for="book-image">Image URL</label>
+                            <input type="url" id="book-image" placeholder="https://example.com/cover.jpg">
+                        </div>
+                    </div>
+
+                    <div class="ai-summary-row">
+                        <button type="button" id="btn-instant-ai" class="btn-ai-summary" onclick="handleAISummary()">
+                            <i class="fas fa-wand-magic-sparkles"></i> Generate AI Summary
+                        </button>
+                    </div>
+
+                    <div class="input-group">
+                        <label for="book-desc">Summary</label>
+                        <textarea id="book-desc"
+                            placeholder="Write a short summary or use AI to generate one..."></textarea>
+                    </div>
+
+                    <div class="modal-actions">
+                        <button type="button" class="btn-ghost" onclick="closeModal()">Cancel</button>
+                        <button id="book-delete-btn" type="button" class="btn-danger-outline hidden"
+                            onclick="deleteBookFromForm()">Delete Copy</button>
+                        <button id="book-save-btn" type="submit" class="btn-primary">Save Book</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <div id="confirm-modal" class="modal small-modal hidden">
+            <div class="modal-body confirm-body">
+                <div class="confirm-icon">
+                    <i class="fas fa-triangle-exclamation"></i>
+                </div>
+                <h3 id="confirm-title">Confirm Action</h3>
+                <p id="confirm-message">Are you sure?</p>
+                <div class="modal-actions">
+                    <button type="button" class="btn-ghost" onclick="closeModal()">Cancel</button>
+                    <button type="button" id="confirm-btn" class="btn-danger">Confirm</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="toast-container"></div>
+
+    <script src="script.js"></script>
+</body>
+
+</html>

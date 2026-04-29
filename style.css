@@ -1678,15 +1678,16 @@ textarea:focus {
     }
 
     .app-main {
-        padding: 16px;
-        padding-bottom: 108px;
+        padding: 14px;
+        padding-bottom: 100px;
     }
 
     .app-header {
         position: static;
         min-height: auto;
-        padding: 20px;
-        border-radius: 24px;
+        padding: 16px 18px;
+        border-radius: 22px;
+        margin-bottom: 14px;
     }
 
     .bottom-nav {
@@ -1699,23 +1700,63 @@ textarea:focus {
     .panel,
     .profile-card,
     .catalog-search-panel {
-        padding: 20px;
-        border-radius: 24px;
+        padding: 16px;
+        border-radius: 20px;
     }
 
     .app-header {
         align-items: flex-start;
         flex-direction: column;
+        gap: 10px;
+        padding: 14px 16px;
+    }
+
+    .page-heading h1 {
+        font-size: 1.35rem;
+    }
+
+    .page-heading p {
+        font-size: 0.82rem;
+        line-height: 1.4;
+    }
+
+    .page-eyebrow {
+        font-size: 0.72rem;
+        margin-bottom: 2px;
     }
 
     .header-actions {
         width: 100%;
-        align-items: stretch;
+        align-items: center;
         flex-wrap: wrap;
+        gap: 8px;
     }
 
     .user-chip {
-        flex: 1 1 220px;
+        flex: 1 1 180px;
+        padding: 8px 12px;
+        border-radius: 14px;
+    }
+
+    .user-chip__label {
+        font-size: 0.72rem;
+    }
+
+    .user-chip strong {
+        font-size: 0.82rem;
+        max-width: 180px;
+    }
+
+    .role-pill {
+        min-height: 26px;
+        padding: 0 10px;
+        font-size: 0.72rem;
+    }
+
+    .icon-btn {
+        width: 40px;
+        height: 40px;
+        border-radius: 14px;
     }
 
     .catalog-search-panel,
@@ -1724,17 +1765,138 @@ textarea:focus {
         grid-template-columns: 1fr;
     }
 
+    .catalog-search-panel {
+        gap: 10px;
+        padding: 14px;
+    }
+
+    #category-filter {
+        min-height: 46px;
+    }
+
+    .section-shell {
+        gap: 14px;
+    }
+
+    /* Book cards - keep topline horizontal */
+    .book-card {
+        padding: 14px;
+    }
+
+    .book-topline {
+        flex-direction: row;
+        align-items: flex-start;
+        gap: 8px;
+    }
+
+    .book-topline h3 {
+        font-size: 0.95rem;
+        flex: 1;
+        min-width: 0;
+        overflow-wrap: anywhere;
+    }
+
+    .book-copy-pill {
+        font-size: 0.7rem;
+        min-height: 24px;
+        padding: 0 8px;
+        flex-shrink: 0;
+        white-space: nowrap;
+    }
+
+    .book-author {
+        font-size: 0.85rem;
+    }
+
+    .book-summary {
+        font-size: 0.84rem;
+        margin-top: 8px;
+        -webkit-line-clamp: 2;
+    }
+
+    .book-meta-row {
+        margin-top: 8px;
+        gap: 6px;
+    }
+
+    .category-pill,
+    .mini-chip {
+        min-height: 24px;
+        padding: 0 8px;
+        font-size: 0.7rem;
+    }
+
+    .book-footer {
+        margin-top: 10px;
+        padding-top: 10px;
+        flex-direction: column;
+        align-items: stretch;
+        gap: 8px;
+    }
+
+    .book-footer .panel-subtle {
+        font-size: 0.78rem;
+    }
+
+    .card-actions {
+        justify-content: flex-end;
+    }
+
+    .book-row {
+        gap: 12px;
+        align-items: flex-start;
+    }
+
+    .book-cover-shell {
+        width: 74px;
+        height: 100px;
+        border-radius: 14px;
+    }
+
+    /* Detail modal */
+    #modal-backdrop {
+        align-items: flex-end;
+        padding: 0;
+    }
+
+    .modal {
+        border-radius: 24px 24px 0 0;
+        max-height: 94vh;
+    }
+
+    .detail-modal {
+        max-height: 94vh;
+        border-radius: 24px 24px 0 0;
+    }
+
+    .modal-header {
+        padding: 16px 18px 0;
+    }
+
+    .modal-header h3 {
+        font-size: 1.1rem;
+    }
+
+    .close-btn {
+        width: 36px;
+        height: 36px;
+        border-radius: 12px;
+        font-size: 1.15rem;
+    }
+
     .detail-hero {
         display: flex;
         flex-direction: column;
         overflow-y: auto;
-        gap: 18px;
+        gap: 16px;
+        padding: 16px;
     }
 
     .detail-cover-shell {
-        width: 140px;
+        width: 160px;
         margin: 0 auto;
         flex-shrink: 0;
+        border-radius: 20px;
     }
 
     .detail-copy {
@@ -1742,52 +1904,245 @@ textarea:focus {
         padding-right: 0;
     }
 
-    #modal-backdrop {
-        align-items: flex-start;
-        padding: 12px;
+    .detail-copy h3 {
+        font-size: 1.3rem;
+        text-align: center;
     }
 
-    .detail-modal {
-        max-height: calc(100vh - 24px);
+    .detail-copy > p {
+        text-align: center;
     }
 
-    .book-row {
-        align-items: stretch;
+    .detail-meta {
+        justify-content: center;
+        margin-top: 10px;
     }
 
-    .book-cover-shell {
-        width: 82px;
-        height: 112px;
+    .detail-copy > div > .btn-primary {
+        width: 100%;
     }
 
-    .book-topline,
-    .book-footer,
-    .admin-control-row,
-    .panel-heading,
-    .section-header-inline,
-    .modal-actions {
-        align-items: stretch;
+    .detail-section h4 {
+        font-size: 0.95rem;
+    }
+
+    .detail-summary {
+        font-size: 0.88rem;
+    }
+
+    .detail-admin {
+        padding: 14px;
+        border-radius: 18px;
+    }
+
+    .admin-control-row {
         flex-direction: column;
+        align-items: stretch;
+        gap: 12px;
+    }
+
+    .admin-control-row .card-actions {
+        justify-content: stretch;
+    }
+
+    .admin-control-row .card-actions .btn-sm {
+        flex: 1;
+    }
+
+    .detail-status {
+        padding: 12px 14px;
+        font-size: 0.88rem;
+        border-radius: 14px;
+    }
+
+    .modal-actions {
+        flex-direction: column;
+        align-items: stretch;
     }
 
     .modal-actions .btn-primary {
         margin-left: 0;
     }
 
+    .modal-body {
+        padding: 16px 18px 20px;
+    }
+
+    /* Panel heading */
+    .panel-heading,
+    .section-header-inline {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 8px;
+    }
+
+    .section-header-inline h2 {
+        font-size: 1.05rem;
+    }
+
+    /* Borrowed and request cards */
+    .request-card {
+        padding: 14px;
+    }
+
+    .request-topline h3 {
+        font-size: 0.95rem;
+    }
+
+    .request-details {
+        font-size: 0.84rem;
+    }
+
+    .request-actions {
+        gap: 8px;
+    }
+
+    .borrowed-card {
+        padding: 14px;
+    }
+
+    .borrowed-card h3 {
+        font-size: 0.95rem;
+    }
+
+    /* Profile */
+    .profile-card {
+        padding: 24px 18px;
+        gap: 16px;
+    }
+
+    .profile-avatar {
+        width: 76px;
+        height: 76px;
+        border-radius: 22px;
+        font-size: 2rem;
+    }
+
+    .profile-meta h2 {
+        font-size: 1.3rem;
+    }
+
+    .profile-actions {
+        width: 100%;
+    }
+
+    .profile-actions button {
+        flex: 1;
+        min-height: 46px;
+    }
+
+    /* Toast */
     #toast-container {
         right: 12px;
         left: 12px;
+        top: 12px;
     }
 
     .toast {
         min-width: 0;
         max-width: none;
+        padding: 12px 14px;
+        border-radius: 14px;
+        font-size: 0.88rem;
+    }
+
+    /* Empty state */
+    .empty-state {
+        padding: 28px 18px;
+        border-radius: 18px;
+    }
+
+    .empty-state i {
+        font-size: 1.6rem;
+        margin-bottom: 10px;
+    }
+
+    .empty-state h3 {
+        font-size: 1rem;
+    }
+
+    .empty-state p {
+        font-size: 0.85rem;
+    }
+
+    /* Confirm modal */
+    .small-modal {
+        border-radius: 24px;
+        margin: auto;
+        max-width: calc(100vw - 32px);
+    }
+
+    .confirm-icon {
+        width: 60px;
+        height: 60px;
+        border-radius: 18px;
+        font-size: 1.4rem;
+    }
+
+    /* Form modal */
+    .form-modal {
+        border-radius: 24px 24px 0 0;
+    }
+
+    /* Bottom nav fine-tuning */
+    .bottom-nav {
+        padding: 6px 6px calc(6px + env(safe-area-inset-bottom));
+    }
+
+    .bottom-nav .nav-item {
+        min-height: 56px;
+        padding: 6px 4px;
+        border-radius: 14px;
+        gap: 2px;
+    }
+
+    .bottom-nav .nav-item i {
+        font-size: 1rem;
+    }
+
+    .bottom-nav .nav-item span {
+        font-size: 0.68rem;
+    }
+
+    /* Admin layouts */
+    .admin-borrowers-layout > .panel,
+    .admin-requests-layout > .panel {
+        padding: 16px;
+        border-radius: 20px;
+    }
+
+    .admin-list-panel .borrower-card {
+        min-height: 72px;
+        padding: 10px 14px 10px 12px;
+    }
+
+    .issued-book-card {
+        padding: 14px;
+    }
+
+    .issued-book-header h3 {
+        font-size: 0.92rem;
+    }
+
+    .issued-book-meta {
+        font-size: 0.84rem;
     }
 }
 
 @media (max-width: 560px) {
     .auth-card {
-        padding: 18px;
+        padding: 16px;
+        border-radius: 22px;
+    }
+
+    .auth-header h2 {
+        font-size: 1.5rem;
+    }
+
+    .auth-logo {
+        width: 72px;
+        height: 72px;
+        border-radius: 18px;
     }
 
     .role-toggle {
@@ -1795,16 +2150,85 @@ textarea:focus {
     }
 
     .book-row {
-        gap: 14px;
+        gap: 10px;
     }
 
     .book-cover-shell {
-        width: 72px;
-        height: 102px;
-        border-radius: 16px;
+        width: 64px;
+        height: 88px;
+        border-radius: 12px;
     }
 
-    
+    .book-topline h3 {
+        font-size: 0.88rem;
+    }
+
+    .book-author {
+        font-size: 0.8rem;
+    }
+
+    .book-summary {
+        font-size: 0.8rem;
+        -webkit-line-clamp: 1;
+    }
+
+    .book-footer .panel-subtle {
+        display: none;
+    }
+
+    .page-heading p {
+        display: none;
+    }
+
+    .detail-cover-shell {
+        width: 130px;
+    }
+
+    .detail-copy h3 {
+        font-size: 1.15rem;
+    }
+
+    .stat-tile {
+        padding: 14px;
+    }
+
+    .stat-tile strong {
+        font-size: 1.5rem;
+    }
+
+    .stat-tile small {
+        font-size: 0.78rem;
+    }
+
+    input,
+    select {
+        min-height: 46px;
+        border-radius: 14px;
+    }
+
+    textarea {
+        min-height: 110px;
+        border-radius: 14px;
+    }
+
+    .btn-primary,
+    .btn-secondary,
+    .btn-danger,
+    .btn-danger-outline,
+    .btn-ghost {
+        min-height: 46px;
+        border-radius: 14px;
+        font-size: 0.9rem;
+    }
+
+    .btn-lg {
+        min-height: 50px;
+    }
+
+    .toggle-btn {
+        min-height: 46px;
+        border-radius: 14px;
+    }
 }
 
 /* ================= AI SUMMARY BUTTON ================= */

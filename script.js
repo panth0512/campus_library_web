@@ -395,7 +395,7 @@ function getGroupedBooks() {
 
 function renderStudentGrid(books, container) {
     container.innerHTML = books.map((book) => {
-        const encodedGroupKey = encodeURIComponent(book.groupKey);
+        const encodedGroupKey = escapeJs(encodeURIComponent(book.groupKey));
         const studentState = getStudentGroupState(book.title);
         const copiesClass = currentCategory === "Popular"
             ? "book-copy-pill popular"
@@ -439,7 +439,7 @@ function renderStudentGrid(books, container) {
 
 function renderAdminGrid(books, container) {
     container.innerHTML = books.map((book) => {
-        const encodedGroupKey = encodeURIComponent(book.groupKey);
+        const encodedGroupKey = escapeJs(encodeURIComponent(book.groupKey));
         const copiesClass = currentCategory === "Popular"
             ? "book-copy-pill popular"
             : book.availableCopies > 0
@@ -557,7 +557,7 @@ function updateSuggestions(text) {
     }
 
     container.innerHTML = list.map((book) => {
-        const key = encodeURIComponent(`${book.title}|${book.author}`);
+        const key = escapeJs(encodeURIComponent(`${book.title}|${book.author}`));
         return `
             <button class="suggestion-item" onclick="openSuggestion('${key}', '${escapeJs(book.title)}')">
                 <span class="borrower-avatar"><i class="fas fa-book-open"></i></span>
